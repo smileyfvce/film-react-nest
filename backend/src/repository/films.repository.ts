@@ -1,12 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { Film } from 'src/films/schema/film.schema';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Film, FilmDocument } from 'src/films/schema/film.schema';
 
 @Injectable()
 export class FilmsRepository {
+  constructor(@InjectModel(Film.name) private filmModel: Model<FilmDocument>) {}
   async getFilms() {
-    return Film.find().exec();
+    return this.filmModel.find().exec();
   }
   async getFilmSchedule(id: string) {
-    return Film.findOne({ id }).exec();
+    const film = await this.filmModel.findOne({ id }).exec();
+    if (!film) {
+      throw new NotFoundException(`Фильм с id ${id} не существует`);
+    }
+    return film;
   }
 }

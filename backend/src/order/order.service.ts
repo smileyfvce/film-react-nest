@@ -3,12 +3,17 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Film } from '../films/schema/film.schema';
+import { Film, FilmDocument } from '../films/schema/film.schema';
 import { CreateOrderDto } from './dto/order.dto';
 import { faker } from '@faker-js/faker';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class OrderService {
+  5;
+  constructor(@InjectModel(Film.name) private filmModel: Model<FilmDocument>) {}
+
   async createOrder(createOrderDto: CreateOrderDto) {
     const { tickets } = createOrderDto;
     const result = [];
@@ -17,7 +22,7 @@ export class OrderService {
       const { film: filmId, session: scheduleId, row, seat, price } = ticket;
       const place = `${row}:${seat}`;
 
-      const film = await Film.findOne({ id: filmId }).exec();
+      const film = await this.filmModel.findOne({ id: filmId }).exec();
       if (!film) {
         throw new NotFoundException(`Фильма c id ${filmId} не существует`);
       }
