@@ -9,9 +9,10 @@ export class FilmsController {
     const films = await this.filmsService.getAllFilms();
     return { items: films };
   }
+
   @Get(':id/schedule')
   async getSchedule(@Param('id') id: string) {
     const film = await this.filmsService.getFilmSchedule(id);
-    return { items: film.schedule };
+    return { items: film.schedules };
   }
 }

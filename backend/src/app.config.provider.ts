@@ -1,18 +1,23 @@
-import { ConfigModule } from '@nestjs/config';
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Schedule } from './entities/schedule.entity';
+import { Film } from './entities/film.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-export const configProvider = {
-  imports: [ConfigModule.forRoot()],
-  provide: 'CONFIG',
-  useValue: <AppConfig>{
-    //TODO прочесть переменнные среды
-  },
-};
-
-export interface AppConfig {
-  database: AppConfigDatabase;
-}
-
-export interface AppConfigDatabase {
-  driver: string;
-  url: string;
-}
+@Module({
+  imports: [
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        url: config.get('DATABASE_URL'),
+        entities: [Film, Schedule],
+        synchronize: false,
+      }),
+    }),
+    TypeOrmModule.forFeature([Film, Schedule]),
+  ],
+  exports: [TypeOrmModule],
+})
+export class DbModule {}
