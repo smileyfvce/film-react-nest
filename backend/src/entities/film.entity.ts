@@ -1,15 +1,15 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Schedule } from './schedule.entity';
 
 @Entity('films')
 export class Film {
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column()
   rating: number;
   @Column()
   director: string;
-  @Column()
+  @Column('text', {array: true})
   tags: string;
   @Column()
   image: string;

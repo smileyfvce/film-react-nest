@@ -1,9 +1,9 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Film } from './film.entity';
 
 @Entity('schedules')
 export class Schedule {
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column()
   daytime: string;
@@ -15,7 +15,7 @@ export class Schedule {
   seats: number;
   @Column()
   price: number;
-  @Column()
+  @Column('text', {array: true, default: []})
   taken: string;
   @ManyToOne(() => Film, (film) => film.schedules)
   @JoinColumn({ name: 'filmId' })
