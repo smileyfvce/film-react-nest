@@ -17,4 +17,4 @@ COPY --from=builder /var/www/app/dist ./dist
 COPY --from=builder /var/www/app/public ./public
 
 EXPOSE 3000
-CMD [ "node", "dist/main.js" ]
+CMD [ "npm", "run", "start:prod" ]
