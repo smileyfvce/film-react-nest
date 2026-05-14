@@ -12,7 +12,7 @@ services:
     networks:
       - backend-network
   backend:
-    build: ./backend
+    image: ghcr.io/smileyfvce/film-react-nest/backend:review-2
     restart: unless-stopped
     env_file:
       - .env
@@ -25,14 +25,14 @@ services:
       - backend-network
 
   frontend:
-    build: ./frontend
+    image: ghcr.io/smileyfvce/film-react-nest/frontend:review-2
     env_file:
       - .env
     volumes:
       - frontend_dist:/dist
 
   nginx:
-    build: ./nginx
+    image: ghcr.io/smileyfvce/film-react-nest/nginx:review-2
     restart: unless-stopped
     ports:
       - "80:80"
