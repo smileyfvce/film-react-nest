@@ -4,11 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateOrderDto } from './dto/order.dto';
-import { faker } from '@faker-js/faker';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Film } from 'src/entities/film.entity';
-import { Schedule } from 'src/entities/schedule.entity';
+import { Film } from '../entities/film.entity';
+import { Schedule } from '../entities/schedule.entity';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class OrderService {
@@ -53,7 +53,7 @@ export class OrderService {
       await this.scheduleRepository.save(schedule);
 
       result.push({
-        id: faker.string.uuid(),
+        id: randomUUID(),
         film: filmId,
         session: scheduleId,
         row,
